@@ -75,7 +75,7 @@ const MangroveMap = () => {
           <MapContainer
             center={center}
             zoom={13}
-            className="h-full w-full"
+            style={{ height: "100%", width: "100%" }}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -86,7 +86,7 @@ const MangroveMap = () => {
                 key={report.id}
                 position={[report.latitude, report.longitude]}
               >
-                <Popup className="custom-popup">
+                <Popup>
                   <div className="p-2 min-w-[200px]">
                     <h3 className="font-semibold text-lg mb-2">{report.title}</h3>
                     <p className="text-sm text-muted-foreground mb-2">
