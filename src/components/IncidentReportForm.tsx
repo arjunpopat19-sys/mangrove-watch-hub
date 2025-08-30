@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { MapPin, Camera, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useReports } from "@/hooks/useReports";
+import { useAuth } from "@/hooks/useAuth";
 
 const IncidentReportForm = () => {
   const [formData, setFormData] = useState({

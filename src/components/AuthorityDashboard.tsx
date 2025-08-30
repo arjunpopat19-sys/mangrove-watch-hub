@@ -74,8 +74,8 @@ const AuthorityDashboard = () => {
   const getStatusBadge = (status: string) => {
     const variants = {
       pending: "outline",
-      verified: "default", 
-      investigating: "secondary",
+      verified: "default/20", 
+      investigating: "secondary/20",
       resolved: "outline"
     } as const;
 

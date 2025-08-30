@@ -1,17 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { Trees, Map, Trophy, Shield, Plus, LogOut, User } from "lucide-react";
+import { Trees, Map, Trophy, Shield, Plus, LogOut, User, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 const Navigation = () => {
   const location = useLocation();
   const { user, signOut, loading } = useAuth();
+
+  // Check if user is admin (you can modify this logic based on your auth system)
+  const isAdmin = user?.email === "admin@mangrovewatch.com" || user?.role === "admin";
 
   const navItems = [
     { path: "/", label: "Home", icon: Trees },
@@ -64,6 +68,17 @@ const Navigation = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link to="/admin" className="flex items-center space-x-2 w-full">
+                          <Settings className="h-4 w-4" />
+                          <span>Admin Panel</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem onClick={signOut} className="flex items-center space-x-2">
                     <LogOut className="h-4 w-4" />
                     <span>Sign Out</span>
