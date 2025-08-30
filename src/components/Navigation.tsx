@@ -1,9 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { Trees, Map, Trophy, Shield, Plus } from "lucide-react";
+import { Trees, Map, Trophy, Shield, Plus, LogOut, User } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navigation = () => {
   const location = useLocation();
+  const { user, signOut, loading } = useAuth();
 
   const navItems = [
     { path: "/", label: "Home", icon: Trees },
@@ -45,9 +53,30 @@ const Navigation = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Button variant="outline" size="sm">
-              Sign In
-            </Button>
+            {loading ? (
+              <div className="h-8 w-16 bg-muted rounded animate-pulse" />
+            ) : user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                    <User className="h-4 w-4" />
+                    <span className="hidden sm:inline">{user.email?.split('@')[0]}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={signOut} className="flex items-center space-x-2">
+                    <LogOut className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/auth">
+                <Button variant="outline" size="sm">
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
