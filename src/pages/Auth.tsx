@@ -51,7 +51,13 @@ const Auth = () => {
         navigate("/");
       }
     } catch (error: any) {
-      setError(error.message || "An error occurred during sign in");
+      if (error.message.includes("Email not confirmed")) {
+        setError("Please check your email and click the confirmation link before signing in.");
+      } else if (error.message.includes("Invalid login credentials")) {
+        setError("Invalid email or password. Please check your credentials.");
+      } else {
+        setError(error.message || "An error occurred during sign in");
+      }
     } finally {
       setLoading(false);
     }
@@ -87,16 +93,26 @@ const Auth = () => {
 
       if (error) throw error;
 
-      if (data.user) {
+      if (data.user && !data.session) {
+        // User needs to confirm email
         toast({
-          title: "Account created!",
-          description: "Please check your email to verify your account.",
+          title: "Check your email!",
+          description: "We sent you a confirmation link. Click it to activate your account.",
         });
-        // Clear form
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
+        setError("Please check your email and click the confirmation link before signing in.");
+      } else if (data.session) {
+        // User was signed up and logged in automatically
+        toast({
+          title: "Welcome!",
+          description: "Your account has been created successfully.",
+        });
+        navigate("/");
       }
+      
+      // Clear form
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
     } catch (error: any) {
       if (error.message.includes("User already registered")) {
         setError("An account with this email already exists. Please sign in instead.");
