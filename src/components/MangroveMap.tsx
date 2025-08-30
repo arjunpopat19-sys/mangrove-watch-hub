@@ -1,17 +1,7 @@
-import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-// Fix for default markers in react-leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
+import { MapPin, Calendar, User } from "lucide-react";
 
 interface IncidentReport {
   id: string;
@@ -58,10 +48,8 @@ const MangroveMap = () => {
     }
   ]);
 
-  const center: [number, number] = [25.7617, -80.1918]; // Miami coordinates
-
   return (
-    <Card className="w-full h-[600px]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>Incident Reports Map</span>
@@ -70,38 +58,43 @@ const MangroveMap = () => {
           </Badge>
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="h-[500px] rounded-lg overflow-hidden">
-          <MapContainer
-            center={center}
-            zoom={13}
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {reports.map((report) => (
-              <Marker
-                key={report.id}
-                position={[report.latitude, report.longitude]}
-              >
-                <Popup>
-                  <div className="p-2 min-w-[200px]">
-                    <h3 className="font-semibold text-lg mb-2">{report.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {report.description}
-                    </p>
-                    <div className="text-xs text-muted-foreground space-y-1">
-                      <p><strong>Reported by:</strong> {report.userName}</p>
-                      <p><strong>Date:</strong> {new Date(report.timestamp).toLocaleDateString()}</p>
-                      <p><strong>Location:</strong> {report.latitude.toFixed(4)}, {report.longitude.toFixed(4)}</p>
-                    </div>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="bg-gradient-to-r from-blue-500/10 to-green-500/10 rounded-lg p-6 text-center">
+            <MapPin className="h-12 w-12 mx-auto mb-4 text-primary" />
+            <h3 className="text-lg font-semibold mb-2">Interactive Map Coming Soon</h3>
+            <p className="text-muted-foreground">
+              Full map functionality will be available soon. For now, browse reports below.
+            </p>
+          </div>
+          
+          {reports.map((report) => (
+            <Card key={report.id} className="border-l-4 border-l-primary">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-semibold text-lg">{report.title}</h4>
+                  <Badge variant="outline" className="shrink-0">
+                    {report.latitude.toFixed(4)}, {report.longitude.toFixed(4)}
+                  </Badge>
+                </div>
+                <p className="text-muted-foreground mb-3">{report.description}</p>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    {report.userName}
                   </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    {new Date(report.timestamp).toLocaleDateString()}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="h-4 w-4" />
+                    Location Coordinates
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </CardContent>
     </Card>
