@@ -59,6 +59,7 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          can_promote_admins: boolean | null
           created_at: string
           email: string
           first_name: string | null
@@ -70,6 +71,7 @@ export type Database = {
         }
         Insert: {
           avatar_url?: string | null
+          can_promote_admins?: boolean | null
           created_at?: string
           email: string
           first_name?: string | null
@@ -81,6 +83,7 @@ export type Database = {
         }
         Update: {
           avatar_url?: string | null
+          can_promote_admins?: boolean | null
           created_at?: string
           email?: string
           first_name?: string | null
@@ -102,6 +105,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      promote_user_to_admin: {
+        Args: { _promoted_by: string; _user_id: string }
         Returns: boolean
       }
     }
